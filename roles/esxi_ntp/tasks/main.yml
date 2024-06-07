@@ -1,0 +1,23 @@
+- name: Configure NTP settings on ESXi host
+  vmware_host_ntp:
+    hostname: "{{ esxi_hostname }}"
+    username: "{{ esxi_username }}"
+    password: "{{ esxi_password }}"
+    esxi_hostname: "{{ inventory_hostname }}"
+    ntp_servers:
+      - pool.ntp.org
+      - time.google.com
+    state: present
+    validate_certs: no  # Utilisez cette option pour désactiver la vérification des certificats SSL
+  delegate_to: localhost
+
+- name: Start NTP service on ESXi host
+  vmware_host_service_manager:
+    hostname: "{{ esxi_hostname }}"
+    username: "{{ esxi_username }}"
+    password: "{{ esxi_password }}"
+    esxi_hostname: "{{ inventory_hostname }}"
+    state: start
+    service_name: ntpd
+    validate_certs: no  # Utilisez cette option pour désactiver la vérification des certificats SSL
+  delegate_to: localhost

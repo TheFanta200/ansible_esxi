@@ -1,0 +1,15 @@
+---
+# tasks file for roles/esxi_groupes_ports
+
+- name: Create portgroups for VLANs
+  community.vmware.vmware_portgroup:
+    hostname: "{{ esxi_hostname }}"
+    username: "{{ esxi_username }}"
+    password: "{{ esxi_password }}"
+    esxi_hostname: "{{ inventory_hostname }}"
+    switch_name: "vSwitch0"  # Adjust based on your switch name
+    portgroup_name: "{{ item.portgroup_name }}"
+    vlan_id: "{{ item.vlan_id }}"
+    validate_certs: no
+  loop: "{{ vlans }}"
+  delegate_to: localhost

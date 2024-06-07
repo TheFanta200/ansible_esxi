@@ -1,0 +1,11 @@
+---
+- hosts: ESXI
+  gather_facts: no
+  vars_files:
+    - ./global_vars/esxi_vault.yml  # Adjust the path as necessary
+  collections:
+    - community.vmware
+  roles:
+    - { name: esxi_ntp, tags: esxi_ntp }
+    - { name: esxi_groupes_ports, tags: esxi_groupes_ports }
+    - { name: update_esxi, tags: update_esxi }
