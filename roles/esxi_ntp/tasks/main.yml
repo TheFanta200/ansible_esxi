@@ -5,8 +5,9 @@
     password: "{{ esxi_password }}"
     esxi_hostname: "{{ inventory_hostname }}"
     ntp_servers:
-      - pool.ntp.org
-      - time.google.com
+      - 0.fr.pool.ntp.org
+      - 1.fr.pool.ntp.org
+      - 2.fr.pool.ntp.org
     state: present
     validate_certs: no  # Utilisez cette option pour désactiver la vérification des certificats SSL
   delegate_to: localhost

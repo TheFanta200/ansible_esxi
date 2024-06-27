@@ -1,0 +1,38 @@
+---
+# tasks file for roles/create_vm
+
+- name: Deploy VM from {{ template_name }}
+  vmware_guest:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: no
+    datacenter: "{{ datacenter_name }}"
+    state: poweredon
+    folder: "/{{ datacenter_name }}/vm"
+    template: "{{ template_name }}"
+    name: "{{ vm_name }}"
+    cluster: "{{ cluster_name }}"
+    datastore: "{{ virtual_machine_datastore }}"
+    networks:
+      - name: "{{GROUPE_PORTS}}"
+        type: dhcp
+    customization:
+      hostname: "{{ vm_name }}"
+      dns_servers:
+        - "{{ DNS1 }}"
+        - "{{ DNS2 }}"
+    wait_for_ip_address: yes
+    hardware:
+      memory_mb: "{{ RAM }}"
+      num_cpus: "{{ CPU }}"
+      num_cpu_cores_per_socket: 2
+      hotadd_cpu: True
+      hotremove_cpu: True
+      hotadd_memory: True
+  register: deploy_vm
+  delegate_to: localhost
+
+- name: Print the IP address of the deployed VM
+  debug:
+    msg: "The IP address of {{ vm_name }} is {{ deploy_vm.instance.ipv4 }}"
